@@ -1,0 +1,96 @@
+<html>
+
+<head>
+    <title>Tetrichele</title>
+</head>
+
+<!--
+    Esta é uma cópia do exemplo apresentado em alexandreaquiles.com.br 
+    apenas para estudo.
+-->
+
+<body>
+    <canvas id="canvas" width="640" height="480" style="border: solid 1px black; margin: 0px auto; display: block;"></canvas>
+    <script>
+        function desenhaFundo() {
+            //preenche o fundo com cinza escuro
+            contexto.fillStyle = "dimgray";
+            contexto.fillRect(0, 0, canvas.width, canvas.height);
+
+            //calcada superior
+            contexto.fillStyle = "lightgray";
+            contexto.fillRect(0, 0, canvas.width, 80);
+
+            //calcada inferior
+            contexto.fillStyle = "lightgray";
+            contexto.fillRect(0, 380, canvas.width, 100);
+
+            //faixas
+            contexto.fillStyle = "white";
+            for (var i = 0; i < 25; i++) {
+                contexto.fillRect(i * 30 - 5, 185, 20, 4);
+                contexto.fillRect(i * 30 - 5, 280, 20, 4);
+            }
+        }
+
+        function desenhaImagem() {
+            contexto.drawImage(imagem, x, y, imagem.width, imagem.height);
+        };
+
+        var canvas = document.getElementById("canvas");
+        var contexto = canvas.getContext("2d");
+        contexto.fillStyle = "dimgray";
+        contexto.fillRect(0, 0, canvas.width, canvas.height);
+        //calcada superior
+        contexto.fillStyle = "lightgray";
+        contexto.fillRect(0, 0, canvas.width, 80);
+
+        //calcada inferior
+        contexto.fillStyle = "lightgray";
+        contexto.fillRect(0, 380, canvas.width, 100);
+
+        contexto.fillStyle = "white";
+        for (var i = 0; i < 25; i++) {
+            //faixa superior
+            contexto.fillRect(i * 30 - 5, 185, 20, 4);
+
+            //faixa inferior
+            contexto.fillRect(i * 30 - 5, 280, 20, 4);
+        }
+        var imagem = new Image();
+        imagem.src = "../images/dilminha.png";
+
+        var x = 320;
+        var y = 400;
+
+        function desenhaImagem() {
+            contexto.drawImage(imagem, x, y, imagem.width, imagem.height);
+        };
+
+        imagem.onload = desenhaImagem;
+
+        setInterval(function () {
+            desenhaFundo();
+            desenhaImagem();
+        }, 50);
+
+        document.onkeydown = function (event) {
+            switch (event.which) {
+                case 37: //pra esquerda
+                    x = x - 10;
+                    break;
+                case 38: //pra cima
+                    y = y - 10;
+                    break;
+                case 39: //pra direita
+                    x = x + 10;
+                    break;
+                case 40: //pra baixo
+                    y = y + 10;
+                    break;
+            }
+        }
+    </script>
+</body>
+
+</html>
