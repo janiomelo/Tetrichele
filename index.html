@@ -4,64 +4,179 @@
     <title>Tetrichele</title>
 </head>
 
-<!--
-    Esta é uma cópia do exemplo apresentado em alexandreaquiles.com.br 
-    apenas para estudo.
--->
-
 <body>
-    <canvas id="canvas" width="640" height="480" style="border: solid 1px black; margin: 0px auto; display: block;"></canvas>
+    <canvas id="canvas" width="600" height="480" style="border: solid 1px black; margin: 0px auto; display: block;"></canvas>
     <script>
-        function desenhaFundo() {
-            //preenche o fundo com cinza escuro
-            contexto.fillStyle = "dimgray";
-            contexto.fillRect(0, 0, canvas.width, canvas.height);
+        var canvas = document.getElementById("canvas");
+        var contexto = canvas.getContext("2d");
+        var nColunas = 10;
+        var wCol = 30;
+        var wArena = nColunas * wCol
+        var wBorda = (canvas.width - wArena) / 2;
+        var imagem = new Image();
+        imagem.src = "../images/dilminha.png";
+        var x = 320;
+        var y = 400;
+        var linha_c = -5;
+        var coluna_c = 0;
+        var formaAtual = 0;
 
-            //calcada superior
-            contexto.fillStyle = "lightgray";
-            contexto.fillRect(0, 0, canvas.width, 80);
+        let tetromino_S = [
+            [
+                [0, 0],
+                [0, 1],
+                [1, 1],
+                [1, 2],
+            ], [
+                [0, 0],
+                [1, 0],
+                [1, -1],
+                [2, -1],
+            ],
 
-            //calcada inferior
-            contexto.fillStyle = "lightgray";
-            contexto.fillRect(0, 380, canvas.width, 100);
+        ];
 
-            //faixas
-            contexto.fillStyle = "white";
-            for (var i = 0; i < 25; i++) {
-                contexto.fillRect(i * 30 - 5, 185, 20, 4);
-                contexto.fillRect(i * 30 - 5, 280, 20, 4);
+        let tetromino_Z = [
+            [
+                [1, 0],
+                [1, 1],
+                [0, 1],
+                [0, 2],
+            ], [
+                [0, 0],
+                [1, 0],
+                [1, 1],
+                [2, 1],
+            ],
+
+        ];
+
+
+        let tetromino_O = [
+            [
+                [0, 0],
+                [0, 1],
+                [1, 0],
+                [1, 1],
+            ]
+        ]
+
+        let tetromino_I = [
+            [
+                [0, 0],
+                [0, 1],
+                [0, 2],
+                [0, 3],
+            ], [
+                [0, 0],
+                [1, 0],
+                [2, 0],
+                [3, 0],
+            ]
+        ]
+
+        let tetromino_L = [
+            [
+                [0, 0],
+                [0, 1],
+                [0, 2],
+                [1, 2],
+            ], [
+                [0, 0],
+                [1, 0],
+                [2, 0],
+                [2, -1],
+            ], [
+                [0, 0],
+                [1, 0],
+                [1, 1],
+                [1, 2],
+            ], [
+                [0, 0],
+                [0, 1],
+                [1, 0],
+                [2, 0],
+            ]
+        ]
+
+
+        let tetromino_J = [
+            [
+                [1, 0],
+                [1, 1],
+                [1, 2],
+                [0, 2],
+            ], [
+                [0, 0],
+                [1, 0],
+                [2, 0],
+                [2, 1],
+            ]
+        ]
+
+
+        let tetromino_T = [
+            [ // K
+                [0, 0],
+                [0, 1],
+                [1, 1],
+                [0, 2],
+            ], [ // T
+                [0, 0],
+                [1, 0],
+                [1, 1],
+                [2, 0],
+            ], [ // W
+                [0, 1],
+                [1, 1],
+                [1, 0],
+                [2, 1],
+            ], [ // K <
+                [1, 0],
+                [1, 1],
+                [0, 1],
+                [1, 2],
+            ]
+        ]
+
+        function desenhaBloco() {
+            t = [
+                tetromino_I, tetromino_J, tetromino_L,
+                tetromino_O, tetromino_S, tetromino_T,
+                tetromino_Z
+            ]
+            let x, y;
+            let nRandom = Math.floor(Math.random() * (t.length - 1)) + 1;
+            let forma = t[nRandom];
+
+            if (coluna_c + 1 == nColunas) {
+                coluna_c -= 1;
+            }
+
+            contexto.fillStyle = "red";
+
+            for (let posicao in forma[formaAtual]) {
+                x = (wBorda + wCol * coluna_c) + wCol * forma[formaAtual][posicao][0];
+                y = (wCol * linha_c) + wCol * forma[formaAtual][posicao][1];
+                contexto.fillRect(x, y, wCol, wCol);
             }
         }
 
-        function desenhaImagem() {
-            contexto.drawImage(imagem, x, y, imagem.width, imagem.height);
-        };
+        function desenhaFundo() {
+            //preenche o fundo com cinza escuro
+            contexto.fillStyle = "lightgray";
+            contexto.fillRect(0, 0, canvas.width, canvas.height);
 
-        var canvas = document.getElementById("canvas");
-        var contexto = canvas.getContext("2d");
-        contexto.fillStyle = "dimgray";
-        contexto.fillRect(0, 0, canvas.width, canvas.height);
-        //calcada superior
-        contexto.fillStyle = "lightgray";
-        contexto.fillRect(0, 0, canvas.width, 80);
+            // lado esquerdo
+            contexto.fillStyle = "dimgray";
+            contexto.fillRect(0, 0, wBorda, canvas.height);
 
-        //calcada inferior
-        contexto.fillStyle = "lightgray";
-        contexto.fillRect(0, 380, canvas.width, 100);
+            // lado direito
+            contexto.fillStyle = "dimgray";
+            x = canvas.width - wBorda;
+            contexto.fillRect(x, 0, wBorda, canvas.height);
 
-        contexto.fillStyle = "white";
-        for (var i = 0; i < 25; i++) {
-            //faixa superior
-            contexto.fillRect(i * 30 - 5, 185, 20, 4);
-
-            //faixa inferior
-            contexto.fillRect(i * 30 - 5, 280, 20, 4);
         }
-        var imagem = new Image();
-        imagem.src = "../images/dilminha.png";
-
-        var x = 320;
-        var y = 400;
 
         function desenhaImagem() {
             contexto.drawImage(imagem, x, y, imagem.width, imagem.height);
@@ -71,22 +186,56 @@
 
         setInterval(function () {
             desenhaFundo();
-            desenhaImagem();
+            desenhaBloco();
         }, 50);
+
+        let intervalo = 1000;
+
+        setInterval(function () {
+            linha_c += 1;
+        }, intervalo);
+
+        setInterval(function () {
+            intervalo += 250;
+        }, 20000);
+
+        function vaiPraDireita() {
+            if (coluna_c + 1 < nColunas) {
+                coluna_c += 1;
+            }
+        }
+
+        function vaiPraEsquerda() {
+            if (coluna_c - 1 >= 0) {
+                coluna_c -= 1;
+            }
+        }
+
+        function vaiPraBaixo() {
+            linha_c += 1;
+        }
+
+        function vaiPraCima() {
+            if (formaAtual + 1 == forma.length) {
+                formaAtual = 0;
+            } else {
+                formaAtual += 1;
+            }
+        }
 
         document.onkeydown = function (event) {
             switch (event.which) {
                 case 37: //pra esquerda
-                    x = x - 10;
+                    vaiPraEsquerda();
                     break;
                 case 38: //pra cima
-                    y = y - 10;
+                    vaiPraCima();
                     break;
                 case 39: //pra direita
-                    x = x + 10;
+                    vaiPraDireita();
                     break;
                 case 40: //pra baixo
-                    y = y + 10;
+                    vaiPraBaixo();
                     break;
             }
         }
